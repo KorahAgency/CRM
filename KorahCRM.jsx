@@ -95,6 +95,7 @@ async function storageGet(key){
   if(typeof window!=='undefined'&&window.storage?.get)return window.storage.get(key,true)
   if(hasSupabase&&supabase){
     const {data,error}=await supabase.from('korah_crm_state').select('value').eq('id',key).maybeSingle()
+    if(error)throw new Error(`Supabase leitura: ${error.message}`)
     if(!error)return {value:data?JSON.stringify(data.value):null,source:'supabase'}
   }
   const value=typeof localStorage!=='undefined' ? localStorage.getItem(key) : null
@@ -104,10 +105,12 @@ async function storageSet(key,value){
   if(typeof window!=='undefined'&&window.storage?.set)return window.storage.set(key,value,true)
   if(hasSupabase&&supabase){
     const parsed=JSON.parse(value)
-    const {error}=await supabase.from('korah_crm_state').upsert({id:key,value:parsed,updated_at:new Date().toISOString()})
-    if(!error)return
+    const {error}=await supabase.from('korah_crm_state').upsert({id:key,value:parsed,updated_at:new Date().toISOString()},{onConflict:'id'})
+    if(error)throw new Error(`Supabase gravação: ${error.message}`)
+    return {source:'supabase'}
   }
   if(typeof localStorage!=='undefined')localStorage.setItem(key,value)
+  return {source:'local'}
 }
 
 const D_PIPE = []
@@ -138,6 +141,7 @@ export default function KorahCRM() {
   const [preview, setPreview] = useState(null)
   const [filter, setFilter] = useState({q:'',stage:'',nicho:''})
   const [storeMode, setStoreMode] = useState(hasSupabase?'CONECTANDO':'LOCAL')
+  const [syncError, setSyncError] = useState('')
   const fileRef = useRef()
 
   useEffect(()=>{ load() },[])
@@ -154,12 +158,29 @@ export default function KorahCRM() {
       setStoreMode(connected?'SUPABASE':'LOCAL')
       _setPipe(pipeValue.map(enrichLead))
       _setImp(impValue.map(enrichLead))
-    } catch { setStoreMode('LOCAL'); _setPipe(D_PIPE.map(enrichLead)); _setImp(D_IMP.map(enrichLead)) }
+    } catch(e) { setStoreMode(hasSupabase?'ERRO DB':'LOCAL'); setSyncError(e.message||'Erro ao conectar no banco'); _setPipe(D_PIPE.map(enrichLead)); _setImp(D_IMP.map(enrichLead)) }
     setLoading(false)
   }
 
-  async function savePipe(d){ _setPipe(d); try{ await storageSet(STORE.pipe,JSON.stringify(d)) }catch{} }
-  async function saveImp(d){  _setImp(d);  try{ await storageSet(STORE.imported, JSON.stringify(d)) }catch{} }
+  async function persistState(key,data){
+    try{
+      const r=await storageSet(key,JSON.stringify(data))
+      setStoreMode(r?.source==='supabase'?'SUPABASE':'LOCAL')
+      setSyncError('')
+      return true
+    }catch(e){
+      setStoreMode('ERRO DB')
+      setSyncError(e.message||'Erro ao salvar no Supabase')
+      toast$('Erro ao salvar no Supabase. Veja o aviso no topo.')
+      return false
+    }
+  }
+  async function savePipe(d){ _setPipe(d); await persistState(STORE.pipe,d) }
+  async function saveImp(d){  _setImp(d);  await persistState(STORE.imported,d) }
+  async function testDb(){
+    const ok=await persistState('korah-crm-v2-test',{ok:true,at:new Date().toISOString()})
+    toast$(ok?'Supabase salvando corretamente!':'Falha no Supabase')
+  }
 
   function toast$(msg){ setToast(msg); setTimeout(()=>setToast(null),3000) }
 
