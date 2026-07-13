@@ -1,0 +1,62 @@
+:root {
+  --border: #ead6df;
+  --border-strong: #dcb9c8;
+  --surface-1: #ffffff;
+  --surface-2: #fffafd;
+  --text-primary: #2c2c2c;
+  --text-secondary: #4f4650;
+  --text-muted: #8b7d86;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f7f3f5;
+  color: var(--text-primary);
+}
+
+#root {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 16px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.boot-error {
+  margin: 24px auto;
+  max-width: 720px;
+  padding: 18px 20px;
+  border: 1px solid #e4b6c7;
+  border-left: 4px solid #e8186d;
+  border-radius: 8px;
+  background: #fff;
+  color: #2c2c2c;
+  font: 14px/1.5 "Segoe UI", sans-serif;
+}
+
+.boot-error strong,
+.boot-error span {
+  display: block;
+}
+
+.boot-error span {
+  margin-top: 6px;
+  color: #8b1c47;
+}
+
+@media (max-width: 760px) {
+  #root {
+    padding: 8px;
+  }
+}

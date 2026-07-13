@@ -1,0 +1,22 @@
+{
+  "name": "korah-crm",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "publicar": "npm run build"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "papaparse": "^5.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "read-excel-file": "^5.8.8",
+    "recharts": "^2.15.0",
+    "vite": "^6.0.7"
+  }
+}
