@@ -233,7 +233,7 @@ export default function KorahCRM() {
     a.click(); toast$('Pipeline exportado!')
   }
 
-  if(loading) return <div style={{padding:'60px',textAlign:'center',color:PINK,fontSize:'14px',fontFamily:'Segoe UI,sans-serif'}}>Carregando CRM Korah Agency...</div>
+  if(loading) return <div style={{padding:'60px',textAlign:'center',color:PINK,fontSize:'14px',fontFamily:'Segoe UI,sans-serif'}}>Carregando CRM Korah...</div>
 
   const filtered = pipeline.filter(l=>(!filter.q||l.nome.toLowerCase().includes(filter.q.toLowerCase())||l.nicho.toLowerCase().includes(filter.q.toLowerCase())||String(l.tel||'').includes(filter.q))&&(!filter.stage||STAGES[l.stage]===filter.stage)&&(!filter.nicho||l.nicho===filter.nicho))
   const hasMod = selLead||preview
@@ -279,7 +279,8 @@ export default function KorahCRM() {
       {/* ── Header ── */}
       <div style={{background:PINK,padding:'12px 18px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
         <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-          <span style={{color:'#fff',fontWeight:700,fontSize:'16px',letterSpacing:'.5px'}}>KORAH AGENCY</span>
+          <span style={{color:'#fff',fontWeight:700,fontSize:'16px',letterSpacing:'.5px'}}>KORAH</span>
+          <span style={{color:'rgba(255,255,255,.75)',fontSize:'11px',fontStyle:'italic'}}>Resultados que transformam</span>
           <span style={{background:'rgba(255,255,255,.22)',color:'#fff',fontSize:'10px',padding:'2px 10px',borderRadius:'20px',fontWeight:500}}>CRM PRO</span>
           <span style={{background:'#fff',color:PINK,fontSize:'10px',padding:'2px 10px',borderRadius:'20px',fontWeight:700}}>PÚBLICO</span>
           <span style={{background:storeMode==='SUPABASE'?'#1A6B3C':storeMode==='CONECTANDO'?'#D4880A':'rgba(255,255,255,.22)',color:'#fff',fontSize:'10px',padding:'2px 10px',borderRadius:'20px',fontWeight:700}}>{storeMode}</span>
@@ -578,7 +579,7 @@ function TabFollow({pipeline}){
       <div style={SECBAR}><span style={{fontSize:'11px',fontWeight:700,color:DARK,textTransform:'uppercase',letterSpacing:'.4px'}}>Follow-up prioritário ({urgentes.length+abordados.length+novos.length})</span></div>
       <Section title="🔴 Proposta / Negociação — contatar hoje" color="#C0392B" leads={urgentes} roteiro={l=>`Oi ${l.nome.split(' ')[0]}! Passando pra ver se teve chance de analisar nossa proposta. Posso te mostrar um case? 🚀`} />
       <Section title="🟡 Abordados — sem resposta" color="#D4880A" leads={abordados} roteiro={l=>`Sei que o dia a dia é corrido 😅 Tenho um case de ${l.nicho} que cresceu 40% em 2 meses com a Korah. Te conto rapidinho?`} />
-      <Section title="🟢 Novos leads — abordar agora" color={PINK} leads={novos} roteiro={l=>`Oi! Vi o ${l.nome} no Google. Sou da Korah Agency — trabalho com marketing pra ${l.nicho}. Posso te mostrar como funciona? 😊`} />
+      <Section title="🟢 Novos leads — abordar agora" color={PINK} leads={novos} roteiro={l=>`Oi! Vi o ${l.nome} no Google. Sou da Korah — trabalho com marketing pra ${l.nicho}. Posso te mostrar como funciona? 😊`} />
     </div>
   )
 }
@@ -586,11 +587,11 @@ function TabFollow({pipeline}){
 // ─── Scripts ────────────────────────────────────────────────────
 function TabScripts(){
   const base=[
-    {id:1,t:'Primeiro contato — Salgados/Buffet',c:PINK,txt:`Olá [NOME]! Tudo bem? 😊\n\nVi o [NEGÓCIO] no Google e fiquei impressionado(a) com o trabalho de vocês!\n\nSou da Korah Agency — trabalhamos com marketing digital pra negócios de alimentação. Já ajudamos mais de 80 salgadeiros e buffets a crescer vendas com tráfego pago.\n\nVocê toparia uma conversa rápida de 10 minutos? 🎯`},
+    {id:1,t:'Primeiro contato — Salgados/Buffet',c:PINK,txt:`Olá [NOME]! Tudo bem? 😊\n\nVi o [NEGÓCIO] no Google e fiquei impressionado(a) com o trabalho de vocês!\n\nSou da Korah — trabalhamos com marketing digital pra negócios de alimentação. Já ajudamos mais de 80 salgadeiros e buffets a crescer vendas com tráfego pago.\n\nVocê toparia uma conversa rápida de 10 minutos? 🎯`},
     {id:2,t:'Follow-up — sem resposta (3 dias)',c:'#2980B9',txt:`Oi [NOME]! Sei que o dia a dia é corrido 😅\n\nPassei pra retomar minha mensagem. Tenho um case de salgaderia aqui do RJ que aumentou o faturamento em 40% em 2 meses com a gente.\n\nPosso te contar em 5 minutinhos? ☎️`},
-    {id:3,t:'Envio de proposta',c:'#D4880A',txt:`Oi [NOME]! Conforme conversamos, segue a proposta da Korah Agency:\n\n📦 Pacote: [NOME DO PACOTE]\n💰 Investimento: R$ [VALOR]/mês\n\n✅ Inclui:\n• Gestão de tráfego pago (Meta Ads)\n• [OUTROS SERVIÇOS]\n• Relatório quinzenal\n• Suporte via WhatsApp\n\nDisponível pra uma call amanhã? 🚀`},
+    {id:3,t:'Envio de proposta',c:'#D4880A',txt:`Oi [NOME]! Conforme conversamos, segue a proposta da Korah:\n\n📦 Pacote: [NOME DO PACOTE]\n💰 Investimento: R$ [VALOR]/mês\n\n✅ Inclui:\n• Gestão de tráfego pago (Meta Ads)\n• [OUTROS SERVIÇOS]\n• Relatório quinzenal\n• Suporte via WhatsApp\n\nDisponível pra uma call amanhã? 🚀`},
     {id:4,t:'Reengajamento — lead perdido (90 dias)',c:'#7F8C8D',txt:`Oi [NOME], faz um tempão! 👋\n\nConversamos antes sobre marketing pro [NEGÓCIO], mas entendo que não era o momento.\n\nNossos resultados com [NICHO] estão incríveis — uma empresa similar triplicou os pedidos em 3 meses.\n\nUma conversa de 10 minutos? Sem pressão! 😊`},
-    {id:5,t:'Pós-fechamento — boas-vindas Korah',c:'#1A6B3C',txt:`Oi [NOME]! Seja muito bem-vindo(a) à família Korah Agency! 🎉\n\nPróximos passos:\n1️⃣ Reunião de onboarding: [DATA]\n2️⃣ Preenchimento do briefing: [LINK]\n3️⃣ Acesso às redes e contas de anúncio\n4️⃣ Início das campanhas: [DATA]\n\nA Korah vai fazer seu negócio crescer! 🚀✨`},
+    {id:5,t:'Pós-fechamento — boas-vindas Korah',c:'#1A6B3C',txt:`Oi [NOME]! Seja muito bem-vindo(a) à família Korah! 🎉\n\nPróximos passos:\n1️⃣ Reunião de onboarding: [DATA]\n2️⃣ Preenchimento do briefing: [LINK]\n3️⃣ Acesso às redes e contas de anúncio\n4️⃣ Início das campanhas: [DATA]\n\nA Korah vai fazer seu negócio crescer! 🚀✨`},
   ]
   const [scripts,setScripts]=useState(base)
   useEffect(()=>{ storageGet(STORE.scripts).then(r=>{ if(r?.value)setScripts(JSON.parse(r.value)) }).catch(()=>{}) },[])
