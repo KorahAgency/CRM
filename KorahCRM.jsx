@@ -110,23 +110,14 @@ async function storageSet(key,value){
   if(typeof localStorage!=='undefined')localStorage.setItem(key,value)
 }
 
-const D_PIPE = [
-  {id:1,nome:'Megavip Buffet',nicho:'Salgados/Buffet',tel:'+55 21 97160-1122',wa:'https://wa.me/5521971601122',stage:4,valor:3500,score:95,obs:'Proposta enviada. Decisor: Marcos.',data:'08/07/2026',servicos:'Pacote Completo',site:'megavip.net.br',end:'Rua Pompeu Loureiro, 56 - Copacabana',origem:'Scraping Copacabana'},
-  {id:2,nome:'Antonia Salgadinhos',nicho:'Salgados/Buffet',tel:'+55 21 98308-5544',wa:'https://wa.me/5521983085544',stage:2,valor:2500,score:90,obs:'Muito interessada. Só tem Instagram.',data:'08/07/2026',servicos:'Site, Tráfego Pago',site:'',end:'R. Saint Roman, 122 - Copacabana',origem:'Scraping Copacabana'},
-  {id:3,nome:'Churrascaria Palace',nicho:'Restaurante',tel:'+55 21 2541-5898',wa:'',stage:5,valor:2200,score:100,obs:'✅ Fechou! R$1.800/mês',data:'01/07/2026',servicos:'Tráfego Pago, Social Media',site:'churrascariapalace.com.br',end:'R. Rodolfo Dantas, 16 - Copacabana',origem:'Scraping Copacabana'},
-  {id:4,nome:'Carol Coxinhas',nicho:'Salgados/Buffet',tel:'+55 21 99503-5116',wa:'https://wa.me/5521995035116',stage:1,valor:1500,score:78,obs:'Respondeu positivo. Pediu proposta.',data:'06/07/2026',servicos:'Tráfego Pago',site:'',end:'R. Figueiredo de Magalhães, 581 - Copacabana',origem:'Scraping Copacabana'},
-  {id:5,nome:'La Trattoria',nicho:'Restaurante',tel:'+55 21 2255-3319',wa:'',stage:3,valor:1200,score:82,obs:'Proposta enviada. Aguardando.',data:'05/07/2026',servicos:'Tráfego Pago',site:'latrattoriario.com.br',end:'R. Fernando Mendes, 7 - Copacabana',origem:'Scraping Copacabana'},
-]
-const D_IMP = [
-  {id:101,nome:'Salgadinhos do Bilac',nicho:'Salgados/Buffet',tel:'+55 21 97688-1458',wa:'https://wa.me/5521976881458',end:'R. Pedro Lessa, 459 - Duque de Caxias',site:'',origem:'Scraping Duque de Caxias 6km'},
-  {id:102,nome:"Tchuco's Salgados",nicho:'Salgados/Buffet',tel:'+55 21 99452-9820',wa:'https://wa.me/5521994529820',end:'R. Saldanha Marinho, 969 - Duque de Caxias',site:'tchucos-salgados.ola.click',origem:'Scraping Duque de Caxias 6km'},
-  {id:103,nome:'Confeitaria Coruja',nicho:'Salgados/Buffet',tel:'+55 21 99750-9069',wa:'https://wa.me/5521997509069',end:'Av. Gov. Leonel Brizola, 1790 - Duque de Caxias',site:'',origem:'Scraping Duque de Caxias 6km'},
-  {id:104,nome:'Marisa Salgados',nicho:'Salgados/Buffet',tel:'+55 21 99117-4890',wa:'https://wa.me/5521991174890',end:'R. Poços de Caldas, 791 - Jardim Gramacho',site:'instagram.com/marisasalgados1',origem:'Scraping Duque de Caxias 6km'},
-  {id:105,nome:'Duda Salgadinhos',nicho:'Salgados/Buffet',tel:'+55 21 99327-9849',wa:'https://wa.me/5521993279849',end:'R. Pedro Lessa, 15 - Jardim Leal, Duque de Caxias',site:'',origem:'Scraping Duque de Caxias 6km'},
-  {id:106,nome:'Crepeiros Buffet',nicho:'Salgados/Buffet',tel:'+55 21 99721-6622',wa:'https://wa.me/5521997216622',end:'R. Alm. Gonçalves, 35 - Copacabana',site:'',origem:'Scraping Copacabana 5km'},
-  {id:107,nome:'N&F Salgados',nicho:'Salgados/Buffet',tel:'+55 21 98836-8514',wa:'https://wa.me/5521988368514',end:'R. Benfica, 24 - Vila Leopoldina, Duque de Caxias',site:'',origem:'Scraping Duque de Caxias 6km'},
-  {id:108,nome:'Humm! Salgados Duque de Caxias',nicho:'Salgados/Buffet',tel:'+55 21 98348-0719',wa:'https://wa.me/5521983480719',end:'R. Barbosa de Araújo, 10 - Parque Felicidade',site:'',origem:'Scraping Duque de Caxias 6km'},
-]
+const D_PIPE = []
+const D_IMP = []
+const STORE = {
+  pipe: 'korah-crm-v2-pipe',
+  imported: 'korah-crm-v2-imp',
+  scripts: 'korah-crm-v2-scripts',
+  hist: 'korah-crm-v2-hist',
+}
 
 const inp = {fontSize:'12px',padding:'6px 10px',border:'0.5px solid var(--border)',borderRadius:'6px',width:'100%',background:'var(--surface-2)',color:'var(--text-primary)',fontFamily:'inherit',boxSizing:'border-box'}
 const lbl = {fontSize:'10px',color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'.4px',marginBottom:'3px',display:'block'}
@@ -154,8 +145,8 @@ export default function KorahCRM() {
   async function load() {
     try {
       const [pr,ir] = await Promise.allSettled([
-        storageGet('korah-crm-pipe'),
-        storageGet('korah-crm-imp'),
+        storageGet(STORE.pipe),
+        storageGet(STORE.imported),
       ])
       const pipeValue=pr.status==='fulfilled'&&pr.value?.value ? JSON.parse(pr.value.value) : D_PIPE
       const impValue=ir.status==='fulfilled'&&ir.value?.value ? JSON.parse(ir.value.value) : D_IMP
@@ -167,8 +158,8 @@ export default function KorahCRM() {
     setLoading(false)
   }
 
-  async function savePipe(d){ _setPipe(d); try{ await storageSet('korah-crm-pipe',JSON.stringify(d)) }catch{} }
-  async function saveImp(d){  _setImp(d);  try{ await storageSet('korah-crm-imp', JSON.stringify(d)) }catch{} }
+  async function savePipe(d){ _setPipe(d); try{ await storageSet(STORE.pipe,JSON.stringify(d)) }catch{} }
+  async function saveImp(d){  _setImp(d);  try{ await storageSet(STORE.imported, JSON.stringify(d)) }catch{} }
 
   function toast$(msg){ setToast(msg); setTimeout(()=>setToast(null),3000) }
 
@@ -581,8 +572,8 @@ function TabScripts(){
     {id:5,t:'Pós-fechamento — boas-vindas Korah',c:'#1A6B3C',txt:`Oi [NOME]! Seja muito bem-vindo(a) à família Korah Agency! 🎉\n\nPróximos passos:\n1️⃣ Reunião de onboarding: [DATA]\n2️⃣ Preenchimento do briefing: [LINK]\n3️⃣ Acesso às redes e contas de anúncio\n4️⃣ Início das campanhas: [DATA]\n\nA Korah vai fazer seu negócio crescer! 🚀✨`},
   ]
   const [scripts,setScripts]=useState(base)
-  useEffect(()=>{ storageGet('korah-scripts').then(r=>{ if(r?.value)setScripts(JSON.parse(r.value)) }).catch(()=>{}) },[])
-  function persist(next){ setScripts(next); storageSet('korah-scripts',JSON.stringify(next)).catch(()=>{}) }
+  useEffect(()=>{ storageGet(STORE.scripts).then(r=>{ if(r?.value)setScripts(JSON.parse(r.value)) }).catch(()=>{}) },[])
+  function persist(next){ setScripts(next); storageSet(STORE.scripts,JSON.stringify(next)).catch(()=>{}) }
   function upd(id,d){ persist(scripts.map(s=>s.id===id?{...s,...d}:s)) }
   function add(){
     persist([{id:Date.now(),t:'Novo script',c:PINK,txt:'Oi [NOME], tudo bem?\n\nEscreva aqui sua mensagem.'},...scripts])
@@ -612,15 +603,15 @@ function TabHist({pipeline}){
   const canais=['WhatsApp','Telefone','E-mail','Instagram DM','Presencial']
   const tipos=['Primeiro contato','Follow-up','Envio proposta','Negociação','Fechamento','Pós-venda']
   const resultados=['Sem resposta','Respondeu - positivo','Respondeu - negativo','Agendou reunião','Pediu proposta','Fechou','Perdeu interesse']
-  useEffect(()=>{ storageGet('korah-hist').then(r=>{ if(r?.value)setHist(JSON.parse(r.value)) }).catch(()=>{}) },[])
+  useEffect(()=>{ storageGet(STORE.hist).then(r=>{ if(r?.value)setHist(JSON.parse(r.value)) }).catch(()=>{}) },[])
   function add(){
     if(!form.empresa)return
     const r={id:Date.now(),data:new Date().toLocaleDateString('pt-BR'),...form}
     const h=[r,...hist]
-    setHist(h); storageSet('korah-hist',JSON.stringify(h)).catch(()=>{})
+    setHist(h); storageSet(STORE.hist,JSON.stringify(h)).catch(()=>{})
     setForm(f=>({...f,empresa:'',resultado:'',obs:''}))
   }
-  function del(id){ const h=hist.filter(x=>x.id!==id); setHist(h); storageSet('korah-hist',JSON.stringify(h)).catch(()=>{}) }
+  function del(id){ const h=hist.filter(x=>x.id!==id); setHist(h); storageSet(STORE.hist,JSON.stringify(h)).catch(()=>{}) }
   return (
     <div>
       <div style={SECBAR}><span style={{fontSize:'11px',fontWeight:700,color:DARK,textTransform:'uppercase',letterSpacing:'.4px'}}>Registrar interação</span></div>

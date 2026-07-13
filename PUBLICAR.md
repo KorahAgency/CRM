@@ -46,6 +46,13 @@ npm run build
 Quando o Supabase estiver respondendo corretamente, o cabeçalho do CRM mostra o selo `SUPABASE`.
 Se as variáveis não existirem ou a tabela ainda não tiver sido criada, ele mostra `LOCAL`.
 
+## Zerar tudo para começar novo
+
+O CRM agora começa sem leads de demonstração.
+Para limpar dados antigos do Supabase, rode também o arquivo `supabase-reset.sql` no SQL Editor.
+
+As chaves de armazenamento foram atualizadas para `v2`, então dados antigos do navegador não são puxados automaticamente.
+
 ## Segurança
 
 O SQL atual deixa o CRM público por link e permite leitura/escrita usando a chave anon.
